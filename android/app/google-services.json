@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "900154663865",
+    "project_id": "eventorchoro",
+    "storage_bucket": "eventorchoro.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:900154663865:android:ac52b8d1178f61e232cc68",
+        "android_client_info": {
+          "package_name": "com.example.eventor"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCI14L0jLQ4dPRFDvWJQC6G_0hiBUT9KM8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
