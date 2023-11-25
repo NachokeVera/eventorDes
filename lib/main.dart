@@ -1,6 +1,7 @@
 import 'package:eventor/firebase_options.dart';
 import 'package:eventor/screens/form_evento_page.dart';
 import 'package:eventor/screens/home_page.dart';
+import 'package:eventor/screens/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
         "/formpage": (context) => const FormEvento(),
         "/homepage": (context) => const HomePage(),
       },
-      home: const HomePage(),
+      home: const LoginPage(),
     );
   }
 }
