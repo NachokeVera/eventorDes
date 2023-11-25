@@ -31,6 +31,16 @@ class _HomePageState extends State<HomePage> {
                 .titleLarge!
                 .copyWith(color: Theme.of(context).colorScheme.surfaceTint)),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        actions: [
+          IconButton(
+              onPressed: () async {
+                await GoogleSignIn().signOut();
+                FirebaseAuth.instance.signOut();
+                Navigator.pop(context,
+                    MaterialPageRoute(builder: (context) => login_page()));
+              },
+              icon: Icon(Icons.power_settings_new))
+        ],
       ),
       body: Container(
           padding: const EdgeInsets.all(30),
