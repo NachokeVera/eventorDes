@@ -6,14 +6,11 @@ import 'package:firebase_storage/firebase_storage.dart';
 //import 'package:flutter/material.dart';
 
 class FirestoreService {
-  //obtener lista de estudiantes
   Stream<QuerySnapshot> eventos() {
-    // return FirebaseFirestore.instance.collection('estudiantes').snapshots();
     return FirebaseFirestore.instance
         .collection('eventos')
         .orderBy('fecha')
         .snapshots();
-    // return FirebaseFirestore.instance.collection('estudiantes').where('edad', isLessThanOrEqualTo: 25).snapshots();
   }
 
   Future uploadFile(PlatformFile img) async {
@@ -47,5 +44,21 @@ class FirestoreService {
         .collection('eventos')
         .doc(eventId)
         .update({'likes': like});
+  }
+
+  Future<void> eliminarEvento(String eventId) async {
+    await FirebaseFirestore.instance
+        .collection('eventos')
+        .doc(eventId)
+        .delete();
+  }
+
+  Future<Map<String, dynamic>> getEvento(String eventId) async {
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance
+        .collection('eventos')
+        .doc(eventId)
+        .get();
+
+    return snapshot.data() as Map<String, dynamic>;
   }
 }

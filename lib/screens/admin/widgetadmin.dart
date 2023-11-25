@@ -1,9 +1,10 @@
 import 'package:eventor/service/firestore_service.dart';
+//import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-class EventoContainer extends StatefulWidget {
+class EventoContainerAdmin extends StatefulWidget {
   final String id;
   final String nombre;
   final String lugar;
@@ -13,7 +14,7 @@ class EventoContainer extends StatefulWidget {
   final String imgPath;
   final int likes;
 
-  const EventoContainer({
+  const EventoContainerAdmin({
     Key? key,
     required this.nombre,
     required this.lugar,
@@ -26,10 +27,10 @@ class EventoContainer extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<EventoContainer> createState() => _EventoContainerState();
+  State<EventoContainerAdmin> createState() => _EventoContainerAdminState();
 }
 
-class _EventoContainerState extends State<EventoContainer> {
+class _EventoContainerAdminState extends State<EventoContainerAdmin> {
   bool likeSelected = false;
   Color amarillo = const Color.fromARGB(255, 255, 255, 200);
   Color gris = const Color.fromARGB(255, 206, 206, 206);
@@ -37,7 +38,7 @@ class _EventoContainerState extends State<EventoContainer> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 135,
+      height: 155,
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 25),
       decoration: BoxDecoration(
@@ -75,8 +76,25 @@ class _EventoContainerState extends State<EventoContainer> {
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              SizedBox(
+                  height: 20,
+                  child: FilledButton(
+                    child: Icon(MdiIcons.trashCan, size: 20),
+                    onPressed: () async {
+                      await FirestoreService().eliminarEvento(widget.id);
+                    },
+                  )),
               const SizedBox(
-                height: 8,
+                height: 3,
+              ),
+              SizedBox(
+                  height: 20,
+                  child: FilledButton(
+                    child: Icon(MdiIcons.pen, size: 20),
+                    onPressed: () {},
+                  )),
+              const SizedBox(
+                height: 3,
               ),
               SizedBox(
                 height: 20,
@@ -209,7 +227,7 @@ class MiDialog extends StatelessWidget {
                     if (snapshot.connectionState == ConnectionState.done) {
                       return Image.network(
                         snapshot.data!,
-                        width: 200, // ajusta el tamaño según tus necesidades
+                        width: 200,
                         height: 200,
                         fit: BoxFit.cover,
                       );

@@ -1,39 +1,39 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eventor/screens/admin/widgetadmin.dart';
 import 'package:eventor/service/firestore_service.dart';
 import 'package:flutter/material.dart';
-import 'package:eventor/widgets/mis_widgets.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class AdminPage extends StatefulWidget {
+  const AdminPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<AdminPage> createState() => _AdminPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _AdminPageState extends State<AdminPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, "/formpage");
+        },
+        child: Icon(MdiIcons.plus),
+      ),
       appBar: AppBar(
         centerTitle: true,
-        title: Text('EVENTOR!',
+        title: Text('Admin Eventor!',
             style: Theme.of(context)
                 .textTheme
                 .titleLarge!
-                .copyWith(color: Theme.of(context).colorScheme.surfaceTint)),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.pushNamed(context, "/loginpage");
-              },
-              icon: const Icon(Icons.power_settings_new))
-        ],
+                .copyWith(color: Theme.of(context).colorScheme.inversePrimary)),
+        backgroundColor: Theme.of(context).colorScheme.primary,
       ),
       body: Container(
           padding: const EdgeInsets.all(30),
           alignment: Alignment.topCenter,
-          color: Theme.of(context).colorScheme.surfaceVariant,
+          color: Theme.of(context).colorScheme.tertiaryContainer,
           child: StreamBuilder(
               stream: FirestoreService().eventos(),
               builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
                       var fechaHoraTimestamp = evento['fecha'] as Timestamp;
                       var t = fechaHoraTimestamp.toDate();
                       String eventId = evento.id;
-                      return EventoContainer(
+                      return EventoContainerAdmin(
                         id: eventId,
                         nombre: evento['nombre'],
                         lugar: evento['lugar'],

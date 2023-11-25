@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:time_pickerr/time_pickerr.dart';
 import 'package:intl/intl.dart';
-//import 'package:flutter/services.dart';
 
 class FormEvento extends StatefulWidget {
   const FormEvento({super.key});
@@ -25,14 +24,17 @@ class _FormEventoState extends State<FormEvento> {
   PlatformFile? img;
   late String fechaString = DateFormat('yyyy-MM-dd').format(fecha[0]);
   late String horaString = DateFormat('HH:mm').format(fecha[0]);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(onPressed: () {
-        FirestoreService().eventoAgregar(nombreCtrl.text, lugarCtrl.text,
-            descripcionCtrl.text, fecha[0], tipoEv!, 'imagenes/${img!.name}');
-        FirestoreService().uploadFile(img!);
-        Navigator.pushNamed(context, "/homepage");
+        if ((formKey.currentState as FormState).validate()) {
+          FirestoreService().eventoAgregar(nombreCtrl.text, lugarCtrl.text,
+              descripcionCtrl.text, fecha[0], tipoEv!, 'imagenes/${img!.name}');
+          FirestoreService().uploadFile(img!);
+          Navigator.pushNamed(context, "/homepage");
+        }
       }),
       appBar: AppBar(
         centerTitle: true,
@@ -48,9 +50,16 @@ class _FormEventoState extends State<FormEvento> {
           alignment: Alignment.topCenter,
           color: Theme.of(context).colorScheme.surfaceVariant,
           child: Form(
+            key: formKey,
             child: ListView(
               children: [
                 TextFormField(
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'ingrese un nombre';
+                    }
+                    return null;
+                  },
                   controller: nombreCtrl,
                   decoration: const InputDecoration(
                     labelText: 'Nombre:',
@@ -61,6 +70,12 @@ class _FormEventoState extends State<FormEvento> {
                   height: 15,
                 ),
                 TextFormField(
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'ingrese un lugar';
+                    }
+                    return null;
+                  },
                   controller: lugarCtrl,
                   decoration: const InputDecoration(
                     labelText: 'Lugar:',
@@ -71,6 +86,12 @@ class _FormEventoState extends State<FormEvento> {
                   height: 15,
                 ),
                 TextFormField(
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'ingrese un descripcion';
+                    }
+                    return null;
+                  },
                   controller: descripcionCtrl,
                   decoration: const InputDecoration(
                     labelText: 'Descripcion:',
@@ -141,8 +162,7 @@ class _FormEventoState extends State<FormEvento> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5.0),
         border: Border.all(
-          color:
-              Colors.grey, // Puedes ajustar el color del borde según tu diseño
+          color: Colors.grey,
         ),
       ),
       child: Padding(
