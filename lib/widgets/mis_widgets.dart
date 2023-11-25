@@ -1,6 +1,7 @@
 import 'package:eventor/service/firestore_service.dart';
 //import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class EventoContainer extends StatefulWidget {
@@ -8,8 +9,7 @@ class EventoContainer extends StatefulWidget {
   final String nombre;
   final String lugar;
   final String descripcion;
-  final String fecha;
-  final String hora;
+  final DateTime fechaHora;
   final String tipo;
   final String imgPath;
   final int likes;
@@ -18,8 +18,7 @@ class EventoContainer extends StatefulWidget {
     Key? key,
     required this.nombre,
     required this.lugar,
-    required this.fecha,
-    required this.hora,
+    required this.fechaHora,
     required this.likes,
     required this.descripcion,
     required this.tipo,
@@ -33,9 +32,8 @@ class EventoContainer extends StatefulWidget {
 
 class _EventoContainerState extends State<EventoContainer> {
   bool likeSelected = false;
-  DateTime diaHoy = DateTime.now();
-  Color amarillo = const Color.fromARGB(255, 248, 248, 176);
-  Color gris = const Color.fromARGB(255, 190, 190, 190);
+  Color amarillo = const Color.fromARGB(255, 255, 255, 200);
+  Color gris = const Color.fromARGB(255, 206, 206, 206);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -44,9 +42,7 @@ class _EventoContainerState extends State<EventoContainer> {
       padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 25),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Theme.of(context)
-            .colorScheme
-            .primaryContainer, //_colorEstado(diaHoy),
+        color: _colorEstado(widget.fechaHora),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.shade500,
@@ -71,8 +67,9 @@ class _EventoContainerState extends State<EventoContainer> {
             children: [
               Text('Titulo: ${widget.nombre}'),
               Text('Lugar: ${widget.lugar}'),
-              Text('Fecha: ${widget.fecha}'),
-              Text('Hora: ${widget.hora}'),
+              Text(
+                  'Fecha: ${DateFormat('dd-MM-yyyy').format(widget.fechaHora)}'),
+              Text('Hora: ${DateFormat('HH:mm').format(widget.fechaHora)}'),
             ],
           ),
           Column(
@@ -93,8 +90,9 @@ class _EventoContainerState extends State<EventoContainer> {
                           nomEv: widget.nombre,
                           lugarEv: widget.lugar,
                           descEv: widget.descripcion,
-                          fechaEv: widget.fecha,
-                          horaEv: widget.hora,
+                          fechaEv:
+                              DateFormat('yyyy-MM-dd').format(widget.fechaHora),
+                          horaEv: DateFormat('HH:mm').format(widget.fechaHora),
                           tipoEv: widget.tipo,
                           imgPathEv: widget.imgPath,
                         );
@@ -140,17 +138,18 @@ class _EventoContainerState extends State<EventoContainer> {
     );
   }
 
-  /*Color _colorEstado(DateTime dia) {
-    String fechaHoraS = '${widget.fecha}, ${widget.hora}';
-    DateTime fechaHora = DateTime.parse(fechaHoraS);
-    if (dia.isAfter(fechaHora)) {
-      return gris;
-    } else if (dia.difference(fechaHora).inDays < 3) {
+  Color _colorEstado(DateTime fechaHora) {
+    DateTime diaHoy = DateTime.now();
+    int diferenciaEnDias = fechaHora.difference(diaHoy).inDays;
+    print(diferenciaEnDias);
+    if (diferenciaEnDias > 3) {
+      return Colors.pink.shade100;
+    } else if (diferenciaEnDias >= 0) {
       return amarillo;
     } else {
-      return Theme.of(context).colorScheme.primaryContainer;
+      return gris;
     }
-  }*/
+  }
 }
 
 class MiDialog extends StatelessWidget {

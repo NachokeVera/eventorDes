@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:time_pickerr/time_pickerr.dart';
+import 'package:intl/intl.dart';
 //import 'package:flutter/services.dart';
 
 class FormEvento extends StatefulWidget {
@@ -22,7 +23,8 @@ class _FormEventoState extends State<FormEvento> {
   List<DateTime> fecha = [DateTime.now()];
   String? tipoEv;
   PlatformFile? img;
-
+  late String fechaString = DateFormat('yyyy-MM-dd').format(fecha[0]);
+  late String horaString = DateFormat('HH:mm').format(fecha[0]);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,7 +85,8 @@ class _FormEventoState extends State<FormEvento> {
                     IconButton.filled(
                         onPressed: () => _fechapick(context),
                         icon: Icon(MdiIcons.calendarEdit)),
-                    Text('Fecha Evento: ${_formatDate(fecha[0])}')
+                    Text(
+                        'Fecha Evento: ${DateFormat('dd-MM-yyyy').format(fecha[0])}')
                   ],
                 ),
                 const SizedBox(
@@ -94,7 +97,7 @@ class _FormEventoState extends State<FormEvento> {
                     IconButton.filled(
                         onPressed: () => _horapick(context),
                         icon: Icon(MdiIcons.clockTimeThree)),
-                    Text('Hora Evento: ${_formatTime(fecha[0])}')
+                    Text('Hora Evento: ${DateFormat('HH:mm').format(fecha[0])}')
                   ],
                 ),
                 const SizedBox(
@@ -209,16 +212,14 @@ class _FormEventoState extends State<FormEvento> {
 
     if (result != null && result != fecha) {
       setState(() {
-        fecha = [result[0]!];
+        fecha[0] = DateTime(
+          result[0]!.year,
+          result[0]!.month,
+          result[0]!.day,
+          fecha[0].hour,
+          fecha[0].minute,
+        );
       });
     }
-  }
-
-  String _formatDate(DateTime date) {
-    return '${date.day}/${date.month}/${date.year}';
-  }
-
-  String _formatTime(DateTime time) {
-    return '${time.hour}:${time.minute}';
   }
 }
