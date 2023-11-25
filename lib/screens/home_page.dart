@@ -55,7 +55,9 @@ class _HomePageState extends State<HomePage> {
                       var evento = snapshot.data!.docs[index];
                       var fechaHoraTimestamp = evento['fecha'] as Timestamp;
                       var t = fechaHoraTimestamp.toDate();
+                      String eventId = evento.id;
                       return EventoContainer(
+                        id: eventId,
                         nombre: evento['nombre'],
                         lugar: evento['lugar'],
                         fecha: '${t.day}/${t.month}/${t.year}',

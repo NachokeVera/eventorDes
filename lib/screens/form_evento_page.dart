@@ -30,6 +30,7 @@ class _FormEventoState extends State<FormEvento> {
         FirestoreService().eventoAgregar(nombreCtrl.text, lugarCtrl.text,
             descripcionCtrl.text, fecha[0], tipoEv!, 'imagenes/${img!.name}');
         FirestoreService().uploadFile(img!);
+        Navigator.pushNamed(context, "/homepage");
       }),
       appBar: AppBar(
         centerTitle: true,

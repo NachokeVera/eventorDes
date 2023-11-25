@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class EventoContainer extends StatefulWidget {
+  final String id;
   final String nombre;
   final String lugar;
   final String descripcion;
@@ -23,6 +24,7 @@ class EventoContainer extends StatefulWidget {
     required this.descripcion,
     required this.tipo,
     required this.imgPath,
+    required this.id,
   }) : super(key: key);
 
   @override
@@ -31,8 +33,9 @@ class EventoContainer extends StatefulWidget {
 
 class _EventoContainerState extends State<EventoContainer> {
   bool likeSelected = false;
-  bool favSelected = false;
-
+  DateTime diaHoy = DateTime.now();
+  Color amarillo = const Color.fromARGB(255, 248, 248, 176);
+  Color gris = const Color.fromARGB(255, 190, 190, 190);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -40,12 +43,10 @@ class _EventoContainerState extends State<EventoContainer> {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 25),
       decoration: BoxDecoration(
-        border: Border.all(
-          color: favSelected ? Colors.yellow : Colors.transparent,
-          width: 2.0,
-        ),
         borderRadius: BorderRadius.circular(10),
-        color: Theme.of(context).colorScheme.primaryContainer,
+        color: Theme.of(context)
+            .colorScheme
+            .primaryContainer, //_colorEstado(diaHoy),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.shade500,
@@ -105,21 +106,19 @@ class _EventoContainerState extends State<EventoContainer> {
               const SizedBox(
                 height: 8,
               ),
-              SizedBox(
-                height: 20,
-                child: FilledButton(
-                  child: Icon(MdiIcons.star, size: 20),
-                  onPressed: () {
-                    setState(() {
-                      favSelected = !favSelected;
-                    });
-                  },
-                ),
-              ),
               IconButton(
                 isSelected: likeSelected,
                 onPressed: () {
                   setState(() {
+                    if (!likeSelected) {
+                      int likes = widget.likes + 1;
+                      FirestoreService().actualizarLikes(widget.id, likes);
+                    } else {
+                      int likes = widget.likes - 1;
+                      if (likes >= 0) {
+                        FirestoreService().actualizarLikes(widget.id, likes);
+                      }
+                    }
                     likeSelected = !likeSelected;
                   });
                 },
@@ -127,7 +126,7 @@ class _EventoContainerState extends State<EventoContainer> {
                 selectedIcon: Icon(MdiIcons.heart),
               ),
               Text(
-                '0',
+                widget.likes.toString(),
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 17,
@@ -140,6 +139,18 @@ class _EventoContainerState extends State<EventoContainer> {
       ),
     );
   }
+
+  /*Color _colorEstado(DateTime dia) {
+    String fechaHoraS = '${widget.fecha}, ${widget.hora}';
+    DateTime fechaHora = DateTime.parse(fechaHoraS);
+    if (dia.isAfter(fechaHora)) {
+      return gris;
+    } else if (dia.difference(fechaHora).inDays < 3) {
+      return amarillo;
+    } else {
+      return Theme.of(context).colorScheme.primaryContainer;
+    }
+  }*/
 }
 
 class MiDialog extends StatelessWidget {

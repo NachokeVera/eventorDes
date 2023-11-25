@@ -41,4 +41,11 @@ class FirestoreService {
     final ref = FirebaseStorage.instance.ref().child(imagePath);
     return ref.getDownloadURL();
   }
+
+  Future<void> actualizarLikes(String eventId, int like) async {
+    await FirebaseFirestore.instance
+        .collection('eventos')
+        .doc(eventId)
+        .update({'likes': like});
+  }
 }
